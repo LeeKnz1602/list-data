@@ -9,19 +9,12 @@
   <body>
     <div class="container">
       <h1>LIST DEVICES</h1>
-      <h2>BlueOrange</h2>
-      <div class="form-group">
-        <input type="text" id="nama" placeholder="agent" />
-        <input type="number" id="device" placeholder="device" />
-        <input type="int" id="serial" placeholder="Serial number" />
-        <button class="btn-tambah" onclick="tambahData()">Tambah</button>
-        <button onclick="refreshData()">Refresh</button>
-      </div>
-
+      <h2>Blue<span>Orange</span></h2>
       <div class="search-group">
         <input type="text" id="cari" placeholder="Cari" onkeyup="cariData()" />
+        <button onclick="refreshData()">Refresh</button>
       </div>
-
+      
       <table>
         <thead>
           <tr>
@@ -30,14 +23,27 @@
             <th>Device</th>
             <th>Serial Number</th>
             <th>Note</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody id="data-body"></tbody>
       </table>
     </div>
+    
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
 
-  <div id="editModal" class="modal">
+<!-- <th>Action</th> -->
+ 
+    <!-- <div class="form-group">
+      <input type="text" id="nama" placeholder="agent" />
+      <input type="number" id="device" placeholder="device" />
+      <input type="int" id="serial" placeholder="Serial number" />
+      <button class="btn-tambah" onclick="tambahData()">Tambah</button>
+    </div> -->
+
+  <!-- <div id="editModal" class="modal">
     <div class="modal-content">
     <h2>Edit Data</h2>
     <label>Nama:</label>
@@ -54,9 +60,4 @@
 
     <button onclick="saveEdit()">Simpan</button>
     <button onclick="closeModal()">Batal</button>
-  </div>
-</div>
-
-    <script src="script.js"></script>
-  </body>
-</html>
+  </div> -->

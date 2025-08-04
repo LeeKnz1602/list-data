@@ -1,17 +1,18 @@
 let dataList = [];
 let currentIndex = null;
+const SHEET_API = "https://script.google.com/macros/s/AKfycbzO4gT0n9j4ShxD46XlON6xD3v_U5BONpam-czCmYFgmC-bRJ5g6qg6xd1o0L8wja6xbg/exec";
 
 window.onload = function () {
-  const savedData = localStorage.getItem("dataList");
-  if (savedData) {
-    dataList = JSON.parse(savedData);
-  }
-  renderTable(dataList);
+  fetch(SHEET_API)
+    .then((res) => res.json())
+    .then((data) => {
+      dataList = data;
+      renderTable(dataList);
+    })
+    .catch((err) => {
+      console.error("Gagal mengambil data:", err);
+    });
 };
-
-function simpanKeLocalStorage() {
-  localStorage.setItem("dataList", JSON.stringify(dataList));
-}
 
 function renderTable(data, isSearch = false) {
   const tbody = document.getElementById("data-body");
@@ -23,59 +24,82 @@ function renderTable(data, isSearch = false) {
         <tr>
           <td>${index + 1}</td>
           <td>${item.nama}</td>
-          <td>Driver ${item.device}</td>
+          <td>${item.device}</td>
           <td>${item.serial}</td>
           <td>${item.note || ""}</td>
-          <td>
-            <button class="btn-tambah" onclick="editData(${actualIndex})">Edit</button>
-            <button class="btn-hapus" onclick="hapusData(${actualIndex})">Hapus</button>
-          </td>
-        </tr>
-      `;
-    tbody.innerHTML += row;
-  });
+          `;
+          tbody.innerHTML += row;
+        });
+      }
+      function refreshData() {
+        fetch(SHEET_API)
+        .then((res) => res.json())
+        .then((data) => {
+          dataList = data;
+          document.getElementById("cari").value = "";
+          renderTable(dataList);
+        })
+      }
+      
+      function cariData() {
+        const keyword = document.getElementById("cari").value.toLowerCase().trim();
+        const hasil = dataList
+        .map((item, index) => ({ ...item, originalIndex: index }))
+        .filter(
+          (item) =>
+            item.device.toLowerCase().includes(keyword) ||
+          item.nama.toLowerCase().includes(keyword) ||
+          (item.note && item.note.toLowerCase().includes(keyword))
+        );
+  renderTable(hasil, true);
 }
 
-function updateNote(index, newNote) {
-  dataList[index].note = newNote.trim();
-  simpanKeLocalStorage();
-}
-function tambahData() {
-  simpanKeLocalStorage();
-  const nama = document.getElementById("nama").value.trim();
-  const device = document.getElementById("device").value.trim();
-  const serial = document.getElementById("serial").value.trim();
+//   <td>
+//     <button class="btn-tambah" onclick="editData(${actualIndex})">Edit</button>
+//     <button class="btn-hapus" onclick="hapusData(${actualIndex})">Hapus</button>
+//   </td>
+// </tr>
 
-  if (!nama || !device) {
-    alert("Nama dan device harus diisi!");
-    return;
-  }
-  const isDuplicate = dataList.some(
-    (item) =>
-      item.nama.toLowerCase() === nama.toLowerCase() &&
-      item.device.toLowerCase() === device.toLowerCase() &&
-      item.serial.toLowerCase() === device.toLowerCase()
-  );
+// function tambahData() {
+//   const nama = document.getElementById("nama").value.trim();
+//   const device = document.getElementById("device").value.trim();
+//   const serial = document.getElementById("serial").value.trim();
 
-  if (isDuplicate) {
-    alert("Data yang sama sudah ada!");
-    return;
-  }
-  dataList.push({ nama, device, serial });
-  document.getElementById("nama").value = "";
-  document.getElementById("device").value = "";
-  document.getElementById("serial").value = "";
-  simpanKeLocalStorage();
-  renderTable(dataList);
-}
+//   if (!nama || !device) {
+//     alert("Nama dan device harus diisi!");
+//     return;
+//   }
+//   const isDuplicate = dataList.some(
+//     (item) =>
+//       item.nama.toLowerCase() === nama.toLowerCase() &&
+//       item.device.toLowerCase() === device.toLowerCase() &&
+//       item.serial.toLowerCase() === device.toLowerCase()
+//   );
 
-function hapusData(index) {
-  if (confirm("Yakin ingin menghapus data ini?")) {
-    dataList.splice(index, 1);
-    simpanKeLocalStorage();
-    renderTable(dataList);
-  }
-}
+//   if (isDuplicate) {
+//     alert("Data yang sama sudah ada!");
+//     return;
+//   }
+
+//   const newData = { nama, device, serial };
+
+//   fetch(SHEET_API, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify(newData),
+//   })
+//     .then((res) => res.json())
+//     .then(() => {
+//       dataList.push(newData);
+//       renderTable(dataList);
+//       document.getElementById("nama").value = "";
+//       document.getElementById("device").value = "";
+//       document.getElementById("serial").value = "";
+//     })
+//     .catch((err) => {
+//       console.error("Gagal menambahkan data:", err);
+//     });
+// }
 
 // function editData(index) {
 //   const item = dataList[index];
@@ -101,67 +125,42 @@ function hapusData(index) {
 //   }
 // }
 
-function editData(index) {
-  currentIndex = index;
-  const item = dataList[index];
+// function editData(index) {
+//   currentIndex = index;
+//   const item = dataList[index];
 
-  document.getElementById("editNama").value = item.nama;
-  document.getElementById("editDevice").value = item.device;
-  document.getElementById("editSerial").value = item.serial;
-  document.getElementById("editNote").value = item.note;
-  document.getElementById("editNote").value = item.note ? item.note : "";
+//   document.getElementById("editNama").value = item.nama;
+//   document.getElementById("editDevice").value = item.device;
+//   document.getElementById("editSerial").value = item.serial;
+//   document.getElementById("editNote").value = item.note;
+//   document.getElementById("editNote").value = item.note ? item.note : "";
 
-  document.getElementById("editModal").style.display = "flex";
-}
+//   document.getElementById("editModal").style.display = "flex";
+// }
 
-function saveEdit() {
-  const newNama = document.getElementById("editNama").value.trim();
-  const newDevice = document.getElementById("editDevice").value.trim();
-  const newSerial = document.getElementById("editSerial").value.trim();
-  const newNote = document.getElementById("editNote").value.trim();
+// function saveEdit() {
+//   const newNama = document.getElementById("editNama").value.trim();
+//   const newDevice = document.getElementById("editDevice").value.trim();
+//   const newSerial = document.getElementById("editSerial").value.trim();
+//   const newNote = document.getElementById("editNote").value.trim();
 
-  if (!newNama || !newDevice || !newSerial) {
-    alert("Semua field harus diisi!");
-    return;
-  }
+//   if (!newNama || !newDevice || !newSerial) {
+//     alert("Semua field harus diisi!");
+//     return;
+//   }
 
-  dataList[currentIndex] = {
-    nama: newNama,
-    device: newDevice,
-    serial: newSerial,
-    note: newNote,
-  };
+//   dataList[currentIndex] = {
+//     nama: newNama,
+//     device: newDevice,
+//     serial: newSerial,
+//     note: newNote,
+//   };
 
-  simpanKeLocalStorage();
-  renderTable(dataList);
-  closeModal();
-}
+//   simpanKeLocalStorage();
+//   renderTable(dataList);
+//   closeModal();
+// }
 
-function closeModal() {
-  document.getElementById("editModal").style.display = "none";
-}
-
-
-function refreshData() {
-  const savedData = localStorage.getItem("dataList");
-  if (savedData) {
-    dataList = JSON.parse(savedData);
-  } else {
-    dataList = [];
-  }
-  document.getElementById("cari").value = "";
-  renderTable(dataList);
-}
-
-function cariData() {
-  const keyword = document.getElementById("cari").value.toLowerCase().trim();
-  const hasil = dataList
-    .map((item, index) => ({ ...item, originalIndex: index }))
-    .filter(
-      (item) =>
-        item.device.toLowerCase().includes(keyword) ||
-        item.nama.toLowerCase().includes(keyword) ||
-        (item.note && item.note.toLowerCase().includes(keyword))
-    );
-  renderTable(hasil, true);
-}
+// function closeModal() {
+//   document.getElementById("editModal").style.display = "none";
+// }
