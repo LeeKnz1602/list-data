@@ -1,6 +1,5 @@
 body {
   font-family: cursive;
-  background: #351d70;
   padding: 25px;
   background: linear-gradient(to bottom, rgb(79, 79, 249), rgb(94, 249, 249), rgb(255, 203, 106));
   height: 100%;
@@ -45,6 +44,7 @@ h2 {
     background-color: #007bff;
     color: white;
     border-radius: 11px;
+    margin-left: 15px;
     cursor: pointer;
 }
 
