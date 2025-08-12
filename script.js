@@ -2,25 +2,16 @@ let dataList = [];
 let currentIndex = null;
 const SHEET_API = "https://script.google.com/macros/s/AKfycbzO4gT0n9j4ShxD46XlON6xD3v_U5BONpam-czCmYFgmC-bRJ5g6qg6xd1o0L8wja6xbg/exec";
 
+window.onload = function () {
+  refreshData();
+};
 
 function renderTable(data, isSearch = false) {
   const tbody = document.getElementById("data-body");
   tbody.innerHTML = "";
-
-  window.onload = function () {
-  fetch(SHEET_API)
-    .then((res) => res.json())
-    .then((data) => {
-      dataList = data;
-      renderTable(dataList);
-    })
-    .catch((err) => {
-      console.error("Gagal mengambil data:", err);
-    });
-};
-
+  
   data.forEach((item, index) => {
-  const row = `
+    const row = `
     <tr>
     <td>${index + 1}</td>
     <td>${item.nama}</td>
@@ -29,7 +20,7 @@ function renderTable(data, isSearch = false) {
     <td>${item.note || ""}</td>
     <td>${item.server}</td>
     `;
-  tbody.innerHTML += row;
+    tbody.innerHTML += row;
   });
 }
 function refreshData() {
@@ -48,11 +39,23 @@ function cariData() {
   .map((item, index) => ({ ...item, originalIndex: index }))
   .filter(
     (item) =>
-    item.device.toLowerCase().includes(keyword) ||
+      item.device.toLowerCase().includes(keyword) ||
     item.nama.toLowerCase().includes(keyword)
   );
   renderTable(hasil, true);
 }
+
+//   window.onload = function () {
+//   fetch(SHEET_API)
+//     .then((res) => res.json())
+//     .then((data) => {
+//       dataList = data;
+//       renderTable(dataList);
+//     })
+//     .catch((err) => {
+//       console.error("Gagal mengambil data:", err);
+//     });
+// };
 
 // const actualIndex = isSearch ? item.originalIndex : index;
 
@@ -65,9 +68,9 @@ function cariData() {
 // function tambahData() {
   //   const nama = document.getElementById("nama").value.trim();
   //   const device = document.getElementById("device").value.trim();
-//   const serial = document.getElementById("serial").value.trim();
-
-//   if (!nama || !device) {
+  //   const serial = document.getElementById("serial").value.trim();
+  
+  //   if (!nama || !device) {
 //     alert("Nama dan device harus diisi!");
 //     return;
 //   }
