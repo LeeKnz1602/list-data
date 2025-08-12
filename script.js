@@ -2,7 +2,12 @@ let dataList = [];
 let currentIndex = null;
 const SHEET_API = "https://script.google.com/macros/s/AKfycbzO4gT0n9j4ShxD46XlON6xD3v_U5BONpam-czCmYFgmC-bRJ5g6qg6xd1o0L8wja6xbg/exec";
 
-window.onload = function () {
+
+function renderTable(data, isSearch = false) {
+  const tbody = document.getElementById("data-body");
+  tbody.innerHTML = "";
+
+  window.onload = function () {
   fetch(SHEET_API)
     .then((res) => res.json())
     .then((data) => {
@@ -14,45 +19,43 @@ window.onload = function () {
     });
 };
 
-function renderTable(data, isSearch = false) {
-  const tbody = document.getElementById("data-body");
-  tbody.innerHTML = "";
-
   data.forEach((item, index) => {
-    const actualIndex = isSearch ? item.originalIndex : index;
-    const row = `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${item.nama}</td>
-          <td>${item.device}</td>
-          <td>${item.serial}</td>
-          <td>${item.note || ""}</td>
-          `;
-          tbody.innerHTML += row;
-        });
-      }
-      function refreshData() {
-        fetch(SHEET_API)
-        .then((res) => res.json())
-        .then((data) => {
-          dataList = data;
-          document.getElementById("cari").value = "";
-          renderTable(dataList);
-        })
-      }
-      
-      function cariData() {
-        const keyword = document.getElementById("cari").value.toLowerCase().trim();
-        const hasil = dataList
-        .map((item, index) => ({ ...item, originalIndex: index }))
-        .filter(
-          (item) =>
-            item.device.toLowerCase().includes(keyword) ||
-          item.nama.toLowerCase().includes(keyword) ||
-          (item.note && item.note.toLowerCase().includes(keyword))
-        );
+  const row = `
+    <tr>
+    <td>${index + 1}</td>
+    <td>${item.nama}</td>
+    <td>${item.device}</td>
+    <td>${item.serial}</td>
+    <td>${item.note || ""}</td>
+    <td>${item.server}</td>
+    `;
+  tbody.innerHTML += row;
+  });
+}
+function refreshData() {
+  fetch(SHEET_API)
+  .then((res) => res.json())
+  .then((data) => {
+    dataList = data;
+    document.getElementById("cari").value = "";
+    renderTable(dataList);
+  })
+}
+
+function cariData() {
+  const keyword = document.getElementById("cari").value.toLowerCase().trim();
+  const hasil = dataList
+  .map((item, index) => ({ ...item, originalIndex: index }))
+  .filter(
+    (item) =>
+    item.device.toLowerCase().includes(keyword) ||
+    item.nama.toLowerCase().includes(keyword) ||
+    (item.note && item.note.toLowerCase().includes(keyword))
+  );
   renderTable(hasil, true);
 }
+
+// const actualIndex = isSearch ? item.originalIndex : index;
 
 //   <td>
 //     <button class="btn-tambah" onclick="editData(${actualIndex})">Edit</button>
@@ -61,8 +64,8 @@ function renderTable(data, isSearch = false) {
 // </tr>
 
 // function tambahData() {
-//   const nama = document.getElementById("nama").value.trim();
-//   const device = document.getElementById("device").value.trim();
+  //   const nama = document.getElementById("nama").value.trim();
+  //   const device = document.getElementById("device").value.trim();
 //   const serial = document.getElementById("serial").value.trim();
 
 //   if (!nama || !device) {
