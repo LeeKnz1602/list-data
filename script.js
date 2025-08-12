@@ -49,9 +49,7 @@ function cariData() {
   .filter(
     (item) =>
     item.device.toLowerCase().includes(keyword) ||
-    item.nama.toLowerCase().includes(keyword) ||
-    (item.note && item.note.toLowerCase().includes(keyword)) ||
-    (item.server && item.server.toLowerCase().includes(keyword))
+    item.nama.toLowerCase().includes(keyword)
   );
   renderTable(hasil, true);
 }
