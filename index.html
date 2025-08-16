@@ -14,6 +14,10 @@
       <div class="search-group">
         <input type="text" id="cari" placeholder="Search" onkeyup="cariData()" />
         <button onclick="refreshData()">Refresh</button>
+        <select id="server-select" onchange="refreshData()">
+          <option value="1">Server 1</option>
+          <option value="2">Server 2</option>
+        </select>
       </div>
       
       <table>

@@ -1,6 +1,7 @@
 let dataList = [];
 let currentIndex = null;
-const SHEET_API = "https://script.google.com/macros/s/AKfycbyVIxdPu2maljbJCG6x8W28CCTIAgiLTLFyZDJafmCO89AFVKuyJPh4iUkaM3zb0WkJ_w/exec";
+const SHEET_API1 = "https://script.google.com/macros/s/AKfycbyVIxdPu2maljbJCG6x8W28CCTIAgiLTLFyZDJafmCO89AFVKuyJPh4iUkaM3zb0WkJ_w/exec";
+const SHEET_API2 = "https://script.google.com/macros/s/AKfycbxVxFfU5N13CqJJz-QX8PL80o9AfmAKkElPHsanm6FOl16Ns4EWgqLSwkhd4Req6apmmw/exec";
 
 window.onload = function () {
   refreshData();
@@ -24,15 +25,17 @@ function renderTable(data, isSearch = false) {
   });
 }
 function refreshData() {
-  fetch(SHEET_API)
-  .then((res) => res.json())
-  .then((data) => {
-    dataList = data;
-    document.getElementById("cari").value = "";
-    renderTable(dataList);
-  })
-}
+  const selectedServer = document.getElementById("server-select").value;
+  const url = selectedServer === "1" ? SHEET_API1 : SHEET_API2;
 
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      dataList = data;
+      document.getElementById("cari").value = "";
+      renderTable(dataList);
+    });
+}
 function cariData() {
   const keyword = document.getElementById("cari").value.toLowerCase().trim();
   const hasil = dataList
@@ -45,18 +48,27 @@ function cariData() {
   renderTable(hasil, true);
 }
 
+// function refreshData() {
+//   fetch(SHEET_API1)
+//   .then((res) => res.json())
+//   .then((data) => {
+//     dataList = data;
+//     document.getElementById("cari").value = "";
+//     renderTable(dataList);
+//   })
+// }
 //   window.onload = function () {
-//   fetch(SHEET_API)
-//     .then((res) => res.json())
-//     .then((data) => {
-//       dataList = data;
+  //   fetch(SHEET_API)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+    //       dataList = data;
 //       renderTable(dataList);
 //     })
 //     .catch((err) => {
-//       console.error("Gagal mengambil data:", err);
-//     });
-// };
-
+  //       console.error("Gagal mengambil data:", err);
+  //     });
+  // };
+  
 // const actualIndex = isSearch ? item.originalIndex : index;
 
 //   <td>

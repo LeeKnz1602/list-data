@@ -13,7 +13,6 @@ body {
   border-radius: 8px;
   overflow: scroll;
 }
-
 h1 {
   font-weight: 1000;
   text-align: center;
@@ -24,36 +23,36 @@ h2 {
   text-align: center;
   color: rgb(0, 0, 255);
 }
-  h2 span {
+h2 span {
     color: rgb(255, 165, 0);
   } 
-
-  
-  .search-group input {
-    content: icon;
-    padding: 15px;
-    margin-top: 30px;
-    width: 75%;
-    text-align: center;
-    border: 1.5px solid black;
-    border-radius: 25px;
-  }
-  
-  button {
-    padding: 13px 23px;
+.search-group input {
+  content: icon;
+  padding: 15px;
+  margin-top: 30px;
+  width: 65%;
+  text-align: center;
+  border: 1.5px solid black;
+  border-radius: 25px;
+}
+button {
+    padding: 13px 20px;
     background-color: #007bff;
     color: white;
     border-radius: 11px;
-    margin-left: 15px;
+    margin-left: 10px;
     cursor: pointer;
 }
-
 button:hover {
   background-color: #4175b7;
   color: #ffffff;
-  font-weight: 400  ;
+  font-weight: 700;
 }
-
+select {
+  padding: 10px 10px;
+  border-radius: 15px;
+  font-weight: 700;
+}
 table {
   width: 100%;
   border-collapse: collapse;
