@@ -7,6 +7,10 @@ window.onload = function () {
   refreshData();
 };
 
+function setLoading(isLoading) {
+  document.getElementById("loading").style.display = isLoading ? "block" : "none";
+}
+
 function renderTable(data, isSearch = false) {
   const tbody = document.getElementById("data-body");
   tbody.innerHTML = "";
@@ -28,12 +32,21 @@ function refreshData() {
   const selectedServer = document.getElementById("server-select").value;
   const url = selectedServer === "1" ? SHEET_API1 : SHEET_API2;
 
+  setLoading(true);
+
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
       dataList = data;
       document.getElementById("cari").value = "";
       renderTable(dataList);
+    })
+      .catch((err) => {
+      console.error("Error fetch:", err);
+      alert("Gagal mengambil data!");
+    })
+    .finally(() => {
+      setLoading(false);
     });
 }
 function cariData() {

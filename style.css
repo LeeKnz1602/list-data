@@ -14,7 +14,7 @@ body {
   overflow: scroll;
 }
 h1 {
-  font-weight: 1000;
+  font-weight: 1800;
   text-align: center;
   color: #9933c1;
 }
@@ -25,7 +25,11 @@ h2 {
 }
 h2 span {
     color: rgb(255, 165, 0);
-  } 
+}
+b {
+  font-weight: 900;
+  font-size: xx-large;
+}
 .search-group input {
   content: icon;
   padding: 15px;
