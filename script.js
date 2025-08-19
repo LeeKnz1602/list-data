@@ -2,10 +2,11 @@ let dataList = [];
 let currentIndex = null;
 const SHEET_API1 = "https://script.google.com/macros/s/AKfycbyVIxdPu2maljbJCG6x8W28CCTIAgiLTLFyZDJafmCO89AFVKuyJPh4iUkaM3zb0WkJ_w/exec";
 const SHEET_API2 = "https://script.google.com/macros/s/AKfycbxVxFfU5N13CqJJz-QX8PL80o9AfmAKkElPHsanm6FOl16Ns4EWgqLSwkhd4Req6apmmw/exec";
+const SHEET_API3 = "https://script.google.com/macros/s/AKfycbzvyQkfJmTuc1hnbRGHHoaSuPOUhdLGsdFYBGFKuX4yZflYKMqIEeVwcjHJyHY6AugNyw/exec";
 
 window.onload = function () {
   refreshData();
-};
+}
 
 function setLoading(isLoading) {
   document.getElementById("loading").style.display = isLoading ? "block" : "none";
@@ -21,6 +22,7 @@ function renderTable(data, isSearch = false) {
     <td>${index + 1}</td>
     <td>${item.nama}</td>
     <td>${item.device}</td>
+    <td>${item.bank}</td>
     <td>${item.serial}</td>
     <td>${item.note || ""}</td>
     <td>${item.server}</td>
@@ -30,7 +32,15 @@ function renderTable(data, isSearch = false) {
 }
 function refreshData() {
   const selectedServer = document.getElementById("server-select").value;
-  const url = selectedServer === "1" ? SHEET_API1 : SHEET_API2;
+  let url;
+
+  if (selectedServer === "1") {
+    url = SHEET_API1;
+  } else if (selectedServer === "2") {
+    url = SHEET_API2;
+  } else if (selectedServer === "3") {
+    url = SHEET_API3;
+  }
 
   setLoading(true);
 
